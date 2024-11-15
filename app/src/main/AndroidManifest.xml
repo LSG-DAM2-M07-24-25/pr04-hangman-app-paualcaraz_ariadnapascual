@@ -12,17 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hangman_PauAlcaraz_AriadnaPascual"
         tools:targetApi="31">
+
+        <!-- Declaración de la actividad principal -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Hangman_PauAlcaraz_AriadnaPascual">
+            android:theme="@style/Theme.LaunchScreen"> <!-- Asignamos el tema de Launch Screen -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

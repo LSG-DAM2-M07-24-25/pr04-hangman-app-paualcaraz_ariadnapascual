@@ -2,4 +2,8 @@
 <resources>
 
     <style name="Theme.Hangman_PauAlcaraz_AriadnaPascual" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Tema para la Launch Screen -->
+    <style name="Theme.LaunchScreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/logo</item>
+    </style>
 </resources>
