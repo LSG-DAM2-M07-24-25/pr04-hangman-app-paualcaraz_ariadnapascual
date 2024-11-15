@@ -1,13 +1,20 @@
-package com.example.navigation
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 
-sealed class Routes(val route: String){
-    object MenuScreen : Routes ("MenuScreen")
-    object GameScreen : Routes ("GameScreen/{dificultadSeleccionada}"){
-        fun createRoute(dificultadSeleccionada: String) = "GameScreen/$dificultadSeleccionada"
-    }
+sealed class Routes(val route: String) {
+    object SCREEN1 : Routes("SCREEN1")
+    object SCREEN2 : Routes("SCREEN2")
 }
 
-object ResultScreen : Routes("ResultScreen/{dificultadSeleccionada}/{estado}/{intentosConsumidos}/{palabraSecreta}"){
-    fun createRoute(diificultadSeleccionada: String, estado: String, intentosConsumidos:Int, palabraSecreta: String) =
-        "ResultScreen /$dificultadSeleccionada/$estado/$intentosConsumidos/$palabraSecreta"
+@Composable
+fun SetupNavGraph(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = Routes.SCREEN1.route
+    ) {
+        composable(route = Routes.SCREEN1.route) { SCREEN1(navController) }
+        composable(route = Routes.SCREEN2.route) { Routes.SCREEN2() }
+    }
 }
