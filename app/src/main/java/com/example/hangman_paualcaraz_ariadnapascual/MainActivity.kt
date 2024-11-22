@@ -1,52 +1,54 @@
-package com.example.hangman_paualcaraz_ariadnapascual
+package com.example.navegacio.view
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.hangman_paualcaraz_ariadnapascual.ui.theme.Hangman_PauAlcaraz_AriadnaPascualTheme
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
+import com.example.navegacio.Routes
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        // Cambia al tema principal después de la Launch Screen
-        setTheme(R.style.Theme_MyApp)
+/**
+ * Definició de la pantalla 1
+ * @param navController
+ * @author RIS
+ * @since 2024-11-20
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Screen1(navController: NavController) {
+    var nom: String by remember { mutableStateOf("") }
 
-        super.onCreate(savedInstanceState)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Cyan)
+    ) {
 
-        enableEdgeToEdge() // Si esto es necesario para tu diseño
-        setContent {
-            Hangman_PauAlcaraz_AriadnaPascualTheme { // Usa tu tema principal en Compose
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        TextField(
+            value = nom,
+            placeholder = { Text("Nom") }, // Per tal de que es mostrin les instruccions del TextField
+            onValueChange = { nom = it }
+        )
+
+        Button(
+            onClick = { navController.navigate(Routes.Pantalla2.createRoute(nom)) },
+            enabled = if (nom.isNotEmpty()) true else false
+        ) {
+            Text("Següent pas")
         }
-    }
-}
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Hangman_PauAlcaraz_AriadnaPascualTheme {
-        Greeting("Android")
     }
 }
