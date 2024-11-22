@@ -27,28 +27,9 @@ import com.example.navegacio.Routes
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Screen1(navController: NavController) {
+fun SCREEN1(navController: NavController) {
     var nom: String by remember { mutableStateOf("") }
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Cyan)
-    ) {
 
-        TextField(
-            value = nom,
-            placeholder = { Text("Nom") }, // Per tal de que es mostrin les instruccions del TextField
-            onValueChange = { nom = it }
-        )
-
-        Button(
-            onClick = { navController.navigate(Routes.Pantalla2.createRoute(nom)) },
-            enabled = if (nom.isNotEmpty()) true else false
-        ) {
-            Text("Següent pas")
-        }
     }
 }
