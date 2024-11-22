@@ -15,10 +15,14 @@ import com.example.hangman_paualcaraz_ariadnapascual.ui.theme.Hangman_PauAlcaraz
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Cambia al tema principal después de la Launch Screen
+        setTheme(R.style.Theme_MyApp)
+
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        enableEdgeToEdge() // Si esto es necesario para tu diseño
         setContent {
-            Hangman_PauAlcaraz_AriadnaPascualTheme {
+            Hangman_PauAlcaraz_AriadnaPascualTheme { // Usa tu tema principal en Compose
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
@@ -29,6 +33,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
