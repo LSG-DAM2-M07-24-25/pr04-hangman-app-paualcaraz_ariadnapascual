@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hangman_paualcaraz_ariadnapascual.R
+import com.example.hangman_paualcaraz_ariadnapascual.views.Routes
 
 @Composable
 fun Screen1(navController: NavController) {
@@ -56,7 +57,7 @@ fun Screen1(navController: NavController) {
 
         // Botón para jugar
         Button(
-            onClick = { /* Navegación al juego */ },
+            onClick =  { navController.navigate(Routes.GAME_SCREEN) },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.padding(vertical = 8.dp),
             colors = androidx.compose.material.ButtonDefaults.buttonColors(
