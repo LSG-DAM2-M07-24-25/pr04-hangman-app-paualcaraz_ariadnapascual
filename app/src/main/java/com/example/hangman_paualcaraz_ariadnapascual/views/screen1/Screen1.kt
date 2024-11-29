@@ -1,7 +1,6 @@
 package com.example.hangman_paualcaraz_ariadnapascual.views.screen1
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -12,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,74 +21,80 @@ import com.example.hangman_paualcaraz_ariadnapascual.views.Routes
 
 @Composable
 fun Screen1(navController: NavController) {
-    // Estado para mostrar o no el diálogo de ayuda
     val showHelpDialog = remember { mutableStateOf(false) }
-    val showDifficultyWarning = remember { mutableStateOf(false) } // Estado para el aviso de dificultad
-
-    // Estado para la dificultad seleccionada
+    val showDifficultyWarning = remember { mutableStateOf(false) }
     val selectedDifficulty = remember { mutableStateOf("Difficulty") }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Imagen del logo
+        // Imagen de fondo
         Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo del juego",
-            modifier = Modifier.size(120.dp)
+            painter = painterResource(id = R.drawable.fondo),
+            contentDescription = "Fondo del juego",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
         )
 
-        Spacer(modifier = Modifier.height(32.dp)) // Espaciado entre logo y menú desplegable
+        // Contenido sobre la imagen de fondo
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Botón de selección de dificultad con tamaño fijo
+            MyDropDownMenu(selectedDifficulty)
+            Spacer(modifier = Modifier.height(24.dp))
 
-        //Menú desplegable
-        MyDropDownMenu(selectedDifficulty)
-
-        Spacer(modifier = Modifier.height(24.dp)) // Espaciado entre dropdown y botones
-
-        //Botón para jugar
-        Button(
-            onClick = {
-                if (selectedDifficulty.value == "Difficulty") {
-                    // Si no se seleccionó dificultad, mostrar aviso
-                    showDifficultyWarning.value = true
-                } else {
-                    // Si se seleccionó dificultad, navegar al juego
-                    navController.navigate(Routes.GAME_SCREEN)
+            // Fila con botones Play y Help
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(
+                    onClick = {
+                        if (selectedDifficulty.value == "Difficulty") {
+                            showDifficultyWarning.value = true
+                        } else {
+                            navController.navigate(Routes.GAME_SCREEN)
+                        }
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Blue,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(text = "Play", fontSize = 18.sp)
                 }
-            },
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.padding(vertical = 8.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.Blue,
-                contentColor = Color.White
-            )
-        ) {
-            Text(text = "Play", fontSize = 18.sp)
-        }
 
-        // Botón para ayuda
-        Button(
-            onClick = { showHelpDialog.value = true }, // Abre el diálogo de ayuda
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.padding(vertical = 8.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.Blue,
-                contentColor = Color.White
-            )
-        ) {
-            Text(text = "Help", fontSize = 18.sp)
+                Button(
+                    onClick = { showHelpDialog.value = true },
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Blue,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(text = "Help", fontSize = 18.sp)
+                }
+            }
         }
     }
 
-    // Diálogo de ayuda con normas del juego
+    // Diálogo de ayuda
     if (showHelpDialog.value) {
         AlertDialog(
-            onDismissRequest = { showHelpDialog.value = false }, // Cierra el diálogo
+            onDismissRequest = { showHelpDialog.value = false },
             title = { Text(text = "Normas Básicas del Juego", fontSize = 20.sp, color = Color.Blue) },
             text = {
                 Column {
@@ -105,7 +111,7 @@ fun Screen1(navController: NavController) {
             },
             confirmButton = {
                 Button(
-                    onClick = { showHelpDialog.value = false }, // Cierra el diálogo
+                    onClick = { showHelpDialog.value = false },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.Blue,
                         contentColor = Color.White
@@ -117,15 +123,15 @@ fun Screen1(navController: NavController) {
         )
     }
 
-    // Diálogo de advertencia para dificultad
+    // Diálogo de advertencia para la selección de dificultad
     if (showDifficultyWarning.value) {
         AlertDialog(
-            onDismissRequest = { showDifficultyWarning.value = false }, // Cierra el aviso
+            onDismissRequest = { showDifficultyWarning.value = false },
             title = { Text(text = "¡Advertencia!", fontSize = 20.sp, color = Color.Red) },
             text = { Text("Por favor, selecciona una dificultad antes de continuar.", fontSize = 16.sp) },
             confirmButton = {
                 Button(
-                    onClick = { showDifficultyWarning.value = false }, // Cierra el aviso
+                    onClick = { showDifficultyWarning.value = false },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.Blue,
                         contentColor = Color.White
@@ -143,10 +149,12 @@ fun MyDropDownMenu(selectedDifficulty: MutableState<String>) {
     val expanded = remember { mutableStateOf(false) }
     val difficulties = listOf("Fácil", "Media", "Difícil")
 
-    // Botón que despliega el menú
     Button(
         onClick = { expanded.value = true },
         shape = RoundedCornerShape(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp), // Tamaño fijo igual a los otros botones
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Blue,
             contentColor = Color.White
@@ -155,7 +163,6 @@ fun MyDropDownMenu(selectedDifficulty: MutableState<String>) {
         Text(text = selectedDifficulty.value, fontSize = 16.sp)
     }
 
-    // Menú desplegable
     DropdownMenu(
         expanded = expanded.value,
         onDismissRequest = { expanded.value = false }
