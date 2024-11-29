@@ -2,20 +2,11 @@ package com.example.hangman_paualcaraz_ariadnapascual.views.screen1
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,6 +23,10 @@ import com.example.hangman_paualcaraz_ariadnapascual.views.Routes
 fun Screen1(navController: NavController) {
     // Estado para mostrar o no el diálogo de ayuda
     val showHelpDialog = remember { mutableStateOf(false) }
+    val showDifficultyWarning = remember { mutableStateOf(false) } // Estado para el aviso de dificultad
+
+    // Estado para la dificultad seleccionada
+    val selectedDifficulty = remember { mutableStateOf("Difficulty") }
 
     Column(
         modifier = Modifier
@@ -43,7 +38,7 @@ fun Screen1(navController: NavController) {
     ) {
         // Imagen del logo
         Image(
-            painter = painterResource(id = R.drawable.logo), // Reemplaza con tu logo
+            painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo del juego",
             modifier = Modifier.size(120.dp)
         )
@@ -51,16 +46,24 @@ fun Screen1(navController: NavController) {
         Spacer(modifier = Modifier.height(32.dp)) // Espaciado entre logo y menú desplegable
 
         // Menú desplegable
-        MyDropDownMenu()
+        MyDropDownMenu(selectedDifficulty)
 
         Spacer(modifier = Modifier.height(24.dp)) // Espaciado entre dropdown y botones
 
         // Botón para jugar
         Button(
-            onClick =  { navController.navigate(Routes.GAME_SCREEN) },
+            onClick = {
+                if (selectedDifficulty.value == "Difficulty") {
+                    // Si no se seleccionó dificultad, mostrar aviso
+                    showDifficultyWarning.value = true
+                } else {
+                    // Si se seleccionó dificultad, navegar al juego
+                    navController.navigate(Routes.GAME_SCREEN)
+                }
+            },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.padding(vertical = 8.dp),
-            colors = androidx.compose.material.ButtonDefaults.buttonColors(
+            colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Blue,
                 contentColor = Color.White
             )
@@ -73,7 +76,7 @@ fun Screen1(navController: NavController) {
             onClick = { showHelpDialog.value = true }, // Abre el diálogo de ayuda
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.padding(vertical = 8.dp),
-            colors = androidx.compose.material.ButtonDefaults.buttonColors(
+            colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Blue,
                 contentColor = Color.White
             )
@@ -103,7 +106,27 @@ fun Screen1(navController: NavController) {
             confirmButton = {
                 Button(
                     onClick = { showHelpDialog.value = false }, // Cierra el diálogo
-                    colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Blue,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(text = "OK")
+                }
+            }
+        )
+    }
+
+    // Diálogo de advertencia para dificultad
+    if (showDifficultyWarning.value) {
+        AlertDialog(
+            onDismissRequest = { showDifficultyWarning.value = false }, // Cierra el aviso
+            title = { Text(text = "¡Advertencia!", fontSize = 20.sp, color = Color.Red) },
+            text = { Text("Por favor, selecciona una dificultad antes de continuar.", fontSize = 16.sp) },
+            confirmButton = {
+                Button(
+                    onClick = { showDifficultyWarning.value = false }, // Cierra el aviso
+                    colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.Blue,
                         contentColor = Color.White
                     )
@@ -116,31 +139,30 @@ fun Screen1(navController: NavController) {
 }
 
 @Composable
-fun MyDropDownMenu() {
-    val selectedText = remember { mutableStateOf("Difficulty") } // Sin delegados
-    val expanded = remember { mutableStateOf(false) } // Sin delegados
+fun MyDropDownMenu(selectedDifficulty: MutableState<String>) {
+    val expanded = remember { mutableStateOf(false) }
     val difficulties = listOf("Fácil", "Media", "Difícil")
 
     // Botón que despliega el menú
     Button(
-        onClick = { expanded.value = true }, // Cambia el estado usando .value
+        onClick = { expanded.value = true },
         shape = RoundedCornerShape(8.dp),
-        colors = androidx.compose.material.ButtonDefaults.buttonColors(
+        colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Blue,
             contentColor = Color.White
         )
     ) {
-        Text(text = selectedText.value, fontSize = 16.sp) // Accede al valor con .value
+        Text(text = selectedDifficulty.value, fontSize = 16.sp)
     }
 
     // Menú desplegable
     DropdownMenu(
-        expanded = expanded.value, // Usa .value aquí también
+        expanded = expanded.value,
         onDismissRequest = { expanded.value = false }
     ) {
         difficulties.forEach { difficulty ->
             DropdownMenuItem(onClick = {
-                selectedText.value = difficulty // Actualiza el texto seleccionado
+                selectedDifficulty.value = difficulty
                 expanded.value = false
             }) {
                 Text(text = difficulty, fontSize = 14.sp, color = Color.Black)

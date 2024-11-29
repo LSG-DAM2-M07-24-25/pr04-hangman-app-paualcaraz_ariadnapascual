@@ -1,14 +1,9 @@
-package com.example.hangman_paualcaraz_ariadnapascual.views.launch
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,10 +18,23 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun LaunchScreen(navController: NavController) {
-    // Navegar automáticamente después de un retraso
+    // Estado para el progreso de la barra
+    var progress by remember { mutableStateOf(0f) } // Valor inicial del progreso (0.0 = vacío, 1.0 = lleno)
+
+    // Lanzamos el efecto para manejar el progreso
     LaunchedEffect(Unit) {
-        delay(2000) // Espera 2 segundos
-        navController.navigate(Routes.SCREEN1) // Navega a Screen1
+        val totalTime = 2000L // Tiempo total en milisegundos (2 segundos)
+        val steps = 20 // Número de pasos de actualización del progreso
+        val stepDelay = totalTime / steps // Tiempo entre cada paso
+
+        // Actualizamos el progreso gradualmente
+        for (i in 1..steps) {
+            progress = i / steps.toFloat() // Calculamos el progreso actual
+            delay(stepDelay) // Esperamos entre pasos
+        }
+
+        // Navegamos a la siguiente pantalla
+        navController.navigate(Routes.SCREEN1)
     }
 
     // Diseño de la pantalla Splash
@@ -50,6 +58,18 @@ fun LaunchScreen(navController: NavController) {
             fontSize = 24.sp,
             color = Color.Black,
             textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(16.dp)) // Separación entre el texto y la barra
+
+        // Mostrar la ProgressBar lineal
+        LinearProgressIndicator(
+            progress = progress, // Sincronizado con el progreso
+            color = Color.Black, // Color de la barra que avanza
+            trackColor = Color.LightGray, // Color del fondo
+            modifier = Modifier
+                .fillMaxWidth(0.8f) // Barra ocupa el 80% del ancho
+                .height(8.dp) // Grosor de la barra
         )
     }
 }

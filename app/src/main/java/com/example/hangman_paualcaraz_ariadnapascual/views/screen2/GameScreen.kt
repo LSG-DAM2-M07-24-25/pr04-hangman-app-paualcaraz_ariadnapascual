@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -28,7 +30,8 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -134,9 +137,15 @@ fun AnimatedMessage(message: String) {
     }
 }
 
+
+
 @Composable
 fun AhorcadoCanvas(errors: Int) {
-    Canvas(modifier = Modifier.size(200.dp)) {
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth(0.8f) // Ocupa el 80% del ancho disponible
+            .aspectRatio(1f) // Mantiene proporción cuadrada
+    ) {
         val width = size.width
         val height = size.height
 
@@ -184,8 +193,8 @@ fun AhorcadoCanvas(errors: Int) {
         if (errors >= 5) {
             drawCircle(
                 color = Color.Black,
-                center = Offset(width * 3 / 4, height / 4 + 20.dp.toPx()),
-                radius = 20.dp.toPx(),
+                center = Offset(width * 3 / 4, height / 4 + height / 20),
+                radius = height / 20,
                 style = Stroke(width = 8f)
             )
         }
@@ -193,7 +202,7 @@ fun AhorcadoCanvas(errors: Int) {
         if (errors >= 6) {
             drawLine(
                 color = Color.Black,
-                start = Offset(width * 3 / 4, height / 4 + 40.dp.toPx()),
+                start = Offset(width * 3 / 4, height / 4 + height / 10),
                 end = Offset(width * 3 / 4, height / 2),
                 strokeWidth = 8f,
                 cap = StrokeCap.Round
@@ -204,7 +213,7 @@ fun AhorcadoCanvas(errors: Int) {
             drawLine(
                 color = Color.Black,
                 start = Offset(width * 3 / 4, height / 3),
-                end = Offset(width * 3 / 4 - 40.dp.toPx(), height / 3 - 20.dp.toPx()),
+                end = Offset(width * 3 / 4 - width / 10, height / 3 - height / 20),
                 strokeWidth = 8f,
                 cap = StrokeCap.Round
             )
@@ -214,7 +223,7 @@ fun AhorcadoCanvas(errors: Int) {
             drawLine(
                 color = Color.Black,
                 start = Offset(width * 3 / 4, height / 3),
-                end = Offset(width * 3 / 4 + 40.dp.toPx(), height / 3 - 20.dp.toPx()),
+                end = Offset(width * 3 / 4 + width / 10, height / 3 - height / 20),
                 strokeWidth = 8f,
                 cap = StrokeCap.Round
             )
@@ -224,7 +233,7 @@ fun AhorcadoCanvas(errors: Int) {
             drawLine(
                 color = Color.Black,
                 start = Offset(width * 3 / 4, height / 2),
-                end = Offset(width * 3 / 4 - 30.dp.toPx(), height * 3 / 4),
+                end = Offset(width * 3 / 4 - width / 15, height * 3 / 4),
                 strokeWidth = 8f,
                 cap = StrokeCap.Round
             )
@@ -234,7 +243,7 @@ fun AhorcadoCanvas(errors: Int) {
             drawLine(
                 color = Color.Black,
                 start = Offset(width * 3 / 4, height / 2),
-                end = Offset(width * 3 / 4 + 30.dp.toPx(), height * 3 / 4),
+                end = Offset(width * 3 / 4 + width / 15, height * 3 / 4),
                 strokeWidth = 8f,
                 cap = StrokeCap.Round
             )
