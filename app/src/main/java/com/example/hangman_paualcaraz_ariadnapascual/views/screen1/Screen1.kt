@@ -45,12 +45,12 @@ fun Screen1(navController: NavController) {
 
         Spacer(modifier = Modifier.height(32.dp)) // Espaciado entre logo y menú desplegable
 
-        // Menú desplegable
+        //Menú desplegable
         MyDropDownMenu(selectedDifficulty)
 
         Spacer(modifier = Modifier.height(24.dp)) // Espaciado entre dropdown y botones
 
-        // Botón para jugar
+        //Botón para jugar
         Button(
             onClick = {
                 if (selectedDifficulty.value == "Difficulty") {
