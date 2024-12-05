@@ -6,12 +6,13 @@ class GameViewModel : ViewModel() {
     private val wordList = listOf("AHORCADO", "ANDROID", "KOTLIN", "COMPOSE", "PROGRAMAR")
 
     // Palabra secreta seleccionada aleatoriamente
-    private val secretWord = wordList.random()
+    val secretWord = wordList.random()
 
     val displayedWord = mutableStateOf("_ ".repeat(secretWord.length).trim())
     val selectedLetters = mutableStateOf(setOf<Char>())
     val attemptsLeft = mutableStateOf(6)
     val hintsLeft = mutableStateOf(3) // Número de pistas disponibles
+
 
     // Actualiza el estado del juego al seleccionar una letra
     fun onLetterSelected(letter: Char) {

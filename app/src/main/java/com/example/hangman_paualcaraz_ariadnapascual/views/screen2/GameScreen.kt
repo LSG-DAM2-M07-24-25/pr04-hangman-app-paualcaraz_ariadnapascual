@@ -3,29 +3,37 @@ package com.example.hangman_paualcaraz_ariadnapascual.views.screen2
 import GameViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.TextField
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.navigation.NavController
 
 @Composable
-fun GameScreen(viewModel: GameViewModel = viewModel()) {
-    // Estado para capturar la palabra ingresada en el TextField
+fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavController) {
     var userWord by remember { mutableStateOf("") }
-    var message by remember { mutableStateOf("") } // Mensaje para el estado del juego
+    var message by remember { mutableStateOf("") }
+
+    // Comprobar si el jugador ha ganado o perdido
+    LaunchedEffect(viewModel.hasWon(), viewModel.hasLost()) {
+        if (viewModel.hasWon()) {
+            navController.navigate("winner_screen/${viewModel.attemptsLeft.value}")
+        } else if (viewModel.hasLost()) {
+            navController.navigate("loser_screen/${viewModel.secretWord}")
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -57,32 +65,85 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
 
         // Botón para usar una pista
         Button(
-            onClick = { viewModel.useHint() },
+            onClick = {
+                viewModel.useHint()
+                message = "¡Usaste una pista! Letra revelada."
+            },
             enabled = viewModel.hintsLeft.value > 0,
             modifier = Modifier.padding(8.dp)
         ) {
             Text("Hint", fontSize = 18.sp)
         }
 
-        // Teclado virtual
-        val alphabet = ('A'..'Z')
-        Column {
-            alphabet.chunked(7).forEach { row ->
-                Row {
-                    row.forEach { letter ->
-                        Button(
-                            onClick = {
-                                viewModel.onLetterSelected(letter)
-                                message = if (letter in viewModel.displayedWord.value) {
-                                    "¡Bien hecho! La letra está en la palabra."
-                                } else {
-                                    "¡Letra incorrecta, intenta de nuevo!"
-                                }
-                            },
-                            enabled = !viewModel.selectedLetters.value.contains(letter),
-                            modifier = Modifier.padding(4.dp)
-                        ) {
-                            Text(text = letter.toString(), fontSize = 14.sp)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Teclado virtual con última fila alineada desde la izquierda
+        val alphabet = ('A'..'Z').toList()
+        val rows = alphabet.chunked(7) // Dividir en filas de 7 letras
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            rows.forEachIndexed { index, row ->
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // Para la última fila: espacios vacíos al final
+                    if (index == rows.lastIndex && row.size < 7) {
+                        // Dibujar botones desde la izquierda dejando espacios al final
+                        row.forEach { letter ->
+                            Button(
+                                onClick = {
+                                    viewModel.onLetterSelected(letter)
+                                    message = if (letter in viewModel.displayedWord.value) {
+                                        "¡Bien hecho! La letra está en la palabra."
+                                    } else {
+                                        "¡Letra incorrecta, intenta de nuevo!"
+                                    }
+                                },
+                                enabled = !viewModel.selectedLetters.value.contains(letter),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .aspectRatio(1f),
+                                colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                                    backgroundColor = if (viewModel.selectedLetters.value.contains(letter)) Color.Gray else Color.Blue,
+                                    contentColor = Color.White
+                                )
+                            ) {
+                                Text(text = letter.toString(), fontSize = 14.sp)
+                            }
+                        }
+                        // Agregar los espacios vacíos al final
+                        val emptySpaces = 7 - row.size
+                        repeat(emptySpaces) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    } else {
+                        // Dibujar filas completas normalmente
+                        row.forEach { letter ->
+                            Button(
+                                onClick = {
+                                    viewModel.onLetterSelected(letter)
+                                    message = if (letter in viewModel.displayedWord.value) {
+                                        "¡Bien hecho! La letra está en la palabra."
+                                    } else {
+                                        "¡Letra incorrecta, intenta de nuevo!"
+                                    }
+                                },
+                                enabled = !viewModel.selectedLetters.value.contains(letter),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .aspectRatio(1f),
+                                colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                                    backgroundColor = if (viewModel.selectedLetters.value.contains(letter)) Color.Gray else Color.Blue,
+                                    contentColor = Color.White
+                                )
+                            ) {
+                                Text(text = letter.toString(), fontSize = 14.sp)
+                            }
                         }
                     }
                 }
@@ -108,8 +169,8 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
             Button(
                 onClick = {
                     viewModel.checkFullWord(userWord)
-                    message = if (userWord.equals(viewModel.displayedWord.value, ignoreCase = true)) {
-                        "¡Ganaste! La palabra era ${viewModel.displayedWord.value}."
+                    message = if (userWord.equals(viewModel.secretWord, ignoreCase = true)) {
+                        "¡Ganaste! La palabra era ${viewModel.secretWord}."
                     } else {
                         "Palabra incorrecta. Pierdes un intento."
                     }
@@ -121,6 +182,7 @@ fun GameScreen(viewModel: GameViewModel = viewModel()) {
         }
     }
 }
+
 
 @Composable
 fun AnimatedMessage(message: String) {
@@ -137,13 +199,11 @@ fun AnimatedMessage(message: String) {
     }
 }
 
-
-
 @Composable
 fun AhorcadoCanvas(errors: Int) {
     Canvas(
         modifier = Modifier
-            .fillMaxWidth(0.8f) // Ocupa el 80% del ancho disponible
+            .fillMaxWidth(0.6f) // Ocupa el 60% del ancho disponible
             .aspectRatio(1f) // Mantiene proporción cuadrada
     ) {
         val width = size.width

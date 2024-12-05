@@ -71,5 +71,7 @@ fun LaunchScreen(navController: NavController) {
                 .fillMaxWidth(0.8f) // Barra ocupa el 80% del ancho
                 .height(8.dp) // Grosor de la barra
         )
-    }
+    } 
 }
+
+
