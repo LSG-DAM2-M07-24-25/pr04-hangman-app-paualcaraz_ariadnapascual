@@ -1,6 +1,7 @@
 package com.example.hangman_paualcaraz_ariadnapascual.views.screen1
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -23,123 +24,126 @@ import com.example.hangman_paualcaraz_ariadnapascual.views.Routes
 fun Screen1(navController: NavController) {
     val showHelpDialog = remember { mutableStateOf(false) }
     val showDifficultyWarning = remember { mutableStateOf(false) }
-    val selectedDifficulty = remember { mutableStateOf("Difficulty") }
+    val selectedDifficulty = remember { mutableStateOf("Select Difficulty") }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
-        // Imagen de fondo
+        // Imagen de fondo con un filtro de color para crear un contraste
         Image(
             painter = painterResource(id = R.drawable.fondo),
-            contentDescription = "Fondo del juego",
+            contentDescription = "Background Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
 
-        // Contenido sobre la imagen de fondo
+        // Filtro de color oscuro para hacer el contenido más visible
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+        )
+
+        // Contenido centrado sobre la imagen
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(32.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Botón de selección de dificultad con tamaño fijo
+            // Menú desplegable para seleccionar dificultad
             MyDropDownMenu(selectedDifficulty)
+
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Fila con botones Play y Help
+            // Fila con los botones Play y Help
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
                     onClick = {
-                        if (selectedDifficulty.value == "Difficulty") {
+                        if (selectedDifficulty.value == "Select Difficulty") {
                             showDifficultyWarning.value = true
                         } else {
                             navController.navigate(Routes.GAME_SCREEN)
                         }
                     },
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .weight(1f)
-                        .height(50.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Blue,
-                        contentColor = Color.White
-                    )
+                        .height(60.dp)
+                        .padding(4.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF2196F3), contentColor = Color.White)
                 ) {
-                    Text(text = "Play", fontSize = 18.sp)
+                    Text(text = "Play", fontSize = 18.sp, modifier = Modifier.padding(8.dp))
                 }
 
                 Button(
                     onClick = { showHelpDialog.value = true },
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .weight(1f)
-                        .height(50.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Blue,
-                        contentColor = Color.White
-                    )
+                        .height(60.dp)
+                        .padding(4.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF2196F3), contentColor = Color.White)
                 ) {
-                    Text(text = "Help", fontSize = 18.sp)
+                    Text(text = "Help", fontSize = 18.sp, modifier = Modifier.padding(8.dp))
                 }
             }
         }
     }
 
-    // Diálogo de ayuda
+    // Diálogo de ayuda con más estilo
     if (showHelpDialog.value) {
         AlertDialog(
             onDismissRequest = { showHelpDialog.value = false },
-            title = { Text(text = "Normas Básicas del Juego", fontSize = 20.sp, color = Color.Blue) },
+            title = {
+                Text(text = "Game Instructions", fontSize = 20.sp, color = Color.Blue)
+            },
             text = {
                 Column {
-                    Text("1. Adivina la palabra antes de que se complete el ahorcado.", fontSize = 16.sp)
+                    Text("1. Guess the word before the hangman drawing is complete.", fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("2. Selecciona una letra en cada turno.", fontSize = 16.sp)
+                    Text("2. Select a letter on each turn.", fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("3. Cada letra incorrecta añadirá una parte al dibujo del ahorcado.", fontSize = 16.sp)
+                    Text("3. Each wrong letter will add a part to the drawing.", fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("4. Ganas si adivinas la palabra antes de que el dibujo se complete.", fontSize = 16.sp)
+                    Text("4. Win by guessing the word before the drawing finishes.", fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("5. ¡Buena suerte y diviértete!", fontSize = 16.sp)
+                    Text("5. Good luck and have fun!", fontSize = 16.sp)
                 }
             },
             confirmButton = {
                 Button(
                     onClick = { showHelpDialog.value = false },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Blue,
-                        contentColor = Color.White
-                    )
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF2196F3), contentColor = Color.White)
                 ) {
                     Text(text = "OK")
                 }
-            }
+            },
+            shape = RoundedCornerShape(12.dp)
         )
     }
 
-    // Diálogo de advertencia para la selección de dificultad
+    // Diálogo de advertencia de dificultad
     if (showDifficultyWarning.value) {
         AlertDialog(
             onDismissRequest = { showDifficultyWarning.value = false },
-            title = { Text(text = "¡Advertencia!", fontSize = 20.sp, color = Color.Red) },
-            text = { Text("Por favor, selecciona una dificultad antes de continuar.", fontSize = 16.sp) },
+            title = {
+                Text(text = "Warning!", fontSize = 20.sp, color = Color.Red)
+            },
+            text = { Text("Please select a difficulty level before continuing.", fontSize = 16.sp) },
             confirmButton = {
                 Button(
                     onClick = { showDifficultyWarning.value = false },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Blue,
-                        contentColor = Color.White
-                    )
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF2196F3), contentColor = Color.White)
                 ) {
                     Text(text = "OK")
                 }
-            }
+            },
+            shape = RoundedCornerShape(12.dp)
         )
     }
 }
@@ -147,25 +151,24 @@ fun Screen1(navController: NavController) {
 @Composable
 fun MyDropDownMenu(selectedDifficulty: MutableState<String>) {
     val expanded = remember { mutableStateOf(false) }
-    val difficulties = listOf("Fácil", "Media", "Difícil")
+    val difficulties = listOf("Easy", "Medium", "Hard")
 
     Button(
         onClick = { expanded.value = true },
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp), // Tamaño fijo igual a los otros botones
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.Blue,
-            contentColor = Color.White
-        )
+            .height(60.dp)
+            .padding(4.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF2196F3), contentColor = Color.White)
     ) {
         Text(text = selectedDifficulty.value, fontSize = 16.sp)
     }
 
     DropdownMenu(
         expanded = expanded.value,
-        onDismissRequest = { expanded.value = false }
+        onDismissRequest = { expanded.value = false },
+        modifier = Modifier.background(Color.White, RoundedCornerShape(12.dp))
     ) {
         difficulties.forEach { difficulty ->
             DropdownMenuItem(onClick = {
