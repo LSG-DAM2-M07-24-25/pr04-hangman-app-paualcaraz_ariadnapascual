@@ -23,14 +23,14 @@ fun LaunchScreen(navController: NavController) {
 
     // Lanzamos el efecto para manejar el progreso
     LaunchedEffect(Unit) {
-        val totalTime = 2000L // Tiempo total en milisegundos (2 segundos)
-        val steps = 20 // Número de pasos de actualización del progreso
-        val stepDelay = totalTime / steps // Tiempo entre cada paso
+        val totalTime = 2000L
+        val steps = 20
+        val stepDelay = totalTime / steps
 
         // Actualizamos el progreso gradualmente
         for (i in 1..steps) {
-            progress = i / steps.toFloat() // Calculamos el progreso actual
-            delay(stepDelay) // Esperamos entre pasos
+            progress = i / steps.toFloat()
+            delay(stepDelay) 
         }
 
         // Navegamos a la siguiente pantalla
