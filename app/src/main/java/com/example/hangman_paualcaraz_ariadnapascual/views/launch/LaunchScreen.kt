@@ -30,7 +30,7 @@ fun LaunchScreen(navController: NavController) {
         // Actualizamos el progreso gradualmente
         for (i in 1..steps) {
             progress = i / steps.toFloat()
-            delay(stepDelay) 
+            delay(stepDelay)
         }
 
         // Navegamos a la siguiente pantalla

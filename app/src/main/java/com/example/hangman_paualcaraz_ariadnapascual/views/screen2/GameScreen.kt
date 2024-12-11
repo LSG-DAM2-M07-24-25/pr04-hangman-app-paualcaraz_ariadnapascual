@@ -57,10 +57,8 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
             modifier = Modifier.padding(top = 8.dp)
         )
 
-        // Mensaje animado para el estado
         AnimatedMessage(message = message)
 
-        // Animación del ahorcado
         AhorcadoCanvas(errors = 6 - viewModel.attemptsLeft.value)
 
         // Botón para usar una pista
@@ -77,9 +75,8 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Teclado virtual con última fila alineada desde la izquierda
         val alphabet = ('A'..'Z').toList()
-        val rows = alphabet.chunked(7) // Dividir en filas de 7 letras
+        val rows = alphabet.chunked(7)
 
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -91,9 +88,7 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    // Para la última fila: espacios vacíos al final
                     if (index == rows.lastIndex && row.size < 7) {
-                        // Dibujar botones desde la izquierda dejando espacios al final
                         row.forEach { letter ->
                             Button(
                                 onClick = {
