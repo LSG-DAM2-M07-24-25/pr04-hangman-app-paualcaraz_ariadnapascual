@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Canvas
-import androidx.compose.material.TextField
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -47,6 +47,7 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
         Text(
             text = viewModel.displayedWord.value,
             fontSize = 32.sp,
+            color = Color.Blue,
             modifier = Modifier.padding(top = 16.dp)
         )
 
@@ -54,11 +55,14 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
         Text(
             text = "Attempts Left: ${viewModel.attemptsLeft.value} | Hints Left: ${viewModel.hintsLeft.value}",
             fontSize = 18.sp,
+            color = Color.Red,
             modifier = Modifier.padding(top = 8.dp)
         )
 
+        // Mensaje animado
         AnimatedMessage(message = message)
 
+        // Canvas de Ahorcado
         AhorcadoCanvas(errors = 6 - viewModel.attemptsLeft.value)
 
         // Botón para usar una pista
@@ -68,13 +72,17 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
                 message = "¡Usaste una pista! Letra revelada."
             },
             enabled = viewModel.hintsLeft.value > 0,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+                .background(Color.Cyan)
         ) {
-            Text("Hint", fontSize = 18.sp)
+            Text("Hint", fontSize = 18.sp, color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Botones de las letras
         val alphabet = ('A'..'Z').toList()
         val rows = alphabet.chunked(7)
 
@@ -88,59 +96,27 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    // Para la última fila: espacios vacíos al final
-                    if (index == rows.lastIndex && row.size < 7) {
-                        // Dibujar botones desde la izquierda dejando espacios al final
-                        row.forEach { letter ->
-                            Button(
-                                onClick = {
-                                    viewModel.onLetterSelected(letter)
-                                    message = if (letter in viewModel.displayedWord.value) {
-                                        "¡Bien hecho! La letra está en la palabra."
-                                    } else {
-                                        "¡Letra incorrecta, intenta de nuevo!"
-                                    }
-                                },
-                                enabled = !viewModel.selectedLetters.value.contains(letter),
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .aspectRatio(1f),
-                                colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                                    backgroundColor = if (viewModel.selectedLetters.value.contains(letter)) Color.Gray else Color.Blue,
-                                    contentColor = Color.White
-                                )
-                            ) {
-                                Text(text = letter.toString(), fontSize = 14.sp)
-                            }
-                        }
-                        // Agregar los espacios vacíos al final
-                        val emptySpaces = 7 - row.size
-                        repeat(emptySpaces) {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
-                    } else {
-                        // Dibujar filas completas normalmente
-                        row.forEach { letter ->
-                            Button(
-                                onClick = {
-                                    viewModel.onLetterSelected(letter)
-                                    message = if (letter in viewModel.displayedWord.value) {
-                                        "¡Bien hecho! La letra está en la palabra."
-                                    } else {
-                                        "¡Letra incorrecta, intenta de nuevo!"
-                                    }
-                                },
-                                enabled = !viewModel.selectedLetters.value.contains(letter),
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .aspectRatio(1f),
-                                colors = androidx.compose.material.ButtonDefaults.buttonColors(
-                                    backgroundColor = if (viewModel.selectedLetters.value.contains(letter)) Color.Gray else Color.Blue,
-                                    contentColor = Color.White
-                                )
-                            ) {
-                                Text(text = letter.toString(), fontSize = 14.sp)
-                            }
+                    row.forEach { letter ->
+                        Button(
+                            onClick = {
+                                viewModel.onLetterSelected(letter)
+                                message = if (letter in viewModel.displayedWord.value) {
+                                    "¡Bien hecho! La letra está en la palabra."
+                                } else {
+                                    "¡Letra incorrecta, intenta de nuevo!"
+                                }
+                            },
+                            enabled = !viewModel.selectedLetters.value.contains(letter),
+                            modifier = Modifier
+                                .weight(1f)
+                                .aspectRatio(1f)
+                                .padding(4.dp),
+                            colors = androidx.compose.material.ButtonDefaults.buttonColors(
+                                backgroundColor = if (viewModel.selectedLetters.value.contains(letter)) Color.Gray else Color.Blue,
+                                contentColor = Color.White
+                            )
+                        ) {
+                            Text(text = letter.toString(), fontSize = 14.sp)
                         }
                     }
                 }
@@ -162,6 +138,8 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
                 modifier = Modifier
                     .weight(1f)
                     .padding(end = 8.dp)
+                    .background(Color.LightGray),
+                singleLine = true
             )
             Button(
                 onClick = {
