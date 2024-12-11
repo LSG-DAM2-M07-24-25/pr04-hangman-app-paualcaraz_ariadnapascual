@@ -88,7 +88,9 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    // Para la última fila: espacios vacíos al final
                     if (index == rows.lastIndex && row.size < 7) {
+                        // Dibujar botones desde la izquierda dejando espacios al final
                         row.forEach { letter ->
                             Button(
                                 onClick = {
