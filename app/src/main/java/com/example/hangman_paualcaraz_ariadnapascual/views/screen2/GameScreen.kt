@@ -84,7 +84,12 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
 
         // Botones de las letras
         val alphabet = ('A'..'Z').toList()
-        val rows = alphabet.chunked(7)
+        val rows = listOf(
+            alphabet.slice(0..6),   // A-G
+            alphabet.slice(7..13),  // H-N
+            alphabet.slice(14..20), // O-U
+            alphabet.slice(21..25)  // V-Z (última fila)
+        )
 
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -96,6 +101,10 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    if (index == rows.lastIndex) {
+                        // Espacio vacío antes de la última fila
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
                     row.forEach { letter ->
                         Button(
                             onClick = {
@@ -118,6 +127,10 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
                         ) {
                             Text(text = letter.toString(), fontSize = 14.sp)
                         }
+                    }
+                    if (index == rows.lastIndex) {
+                        // Espacio vacío después de la última fila
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             }
@@ -157,7 +170,6 @@ fun GameScreen(viewModel: GameViewModel = viewModel(), navController: NavControl
         }
     }
 }
-
 
 @Composable
 fun AnimatedMessage(message: String) {

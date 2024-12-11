@@ -28,7 +28,7 @@ fun LoserScreen(navController: NavController, word: String) {
             Text("Play again")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate("menu_screen") }) {
+        Button(onClick = { navController.navigate("screen1") }) {
             Text("Menu")
         }
     }
