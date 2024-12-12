@@ -15,6 +15,7 @@ Este es un proyecto de un **juego del ahorcado** desarrollado en **Kotlin** util
 - **Pantallas de resultados**:
   - Ganador 🎉
   - Perdedor 😢
+
 ### 📁 Directorios principales
 - **`model/`**: Definición de estructuras de datos, si es necesario.
 - **`viewModel/`**: Lógica del juego y manejo de estados (`GameViewModel.kt`).
@@ -31,6 +32,37 @@ Este es un proyecto de un **juego del ahorcado** desarrollado en **Kotlin** util
 4. Utiliza las **pistas** sabiamente para revelar letras si te quedas atascado.
 5. Si completas la palabra antes de que se termine el dibujo del ahorcado, ¡ganas! De lo contrario, pierdes.
 
+## 🖼️ Capturas de pantalla
+### Pantalla de inicio (LaunchScreen)
+![Launch Screen](launchscreen.png)
+
+### Pantalla de selección de dificultad (Screen1)
+![Screen 1](screen1.png)
+
+### Pantalla del juego (GameScreen)
+![Game Screen](gamescreen.png)
+![Game Screen 2](gamescreen2.png)
+
+### Pantalla de resultados (ResultScreen)
+![Result Screen](resultscreen1.png)
+
 ## 🛠️ Requisitos
 - **Android Studio**: Para ejecutar y modificar el proyecto.
 - **Kotlin 1.8 o superior**.
+
+## ✨ Próximas mejoras
+- Añadir más niveles de dificultad.
+- Implementar un sistema de puntuación.
+- Soporte para múltiples idiomas.
+- Mejora de la interfaz con animaciones adicionales.
+
+## 🤝 Contribuciones
+¡Contribuciones son bienvenidas! Si quieres colaborar:
+1. Haz un fork del proyecto.
+2. Crea una nueva rama: `git checkout -b feature/nueva-funcionalidad`.
+3. Haz un commit de tus cambios: `git commit -m 'Añadida nueva funcionalidad'`.
+4. Haz un push a la rama: `git push origin feature/nueva-funcionalidad`.
+5. Abre un Pull Request.
+
+
+
