@@ -15,3 +15,22 @@ Este es un proyecto de un **juego del ahorcado** desarrollado en **Kotlin** util
 - **Pantallas de resultados**:
   - Ganador 🎉
   - Perdedor 😢
+### 📁 Directorios principales
+- **`model/`**: Definición de estructuras de datos, si es necesario.
+- **`viewModel/`**: Lógica del juego y manejo de estados (`GameViewModel.kt`).
+- **`views/`**: Interfaces de usuario distribuidas por pantallas:
+  - `LaunchScreen`: Pantalla de bienvenida.
+  - `Screen1`: Selección de dificultad y menú principal.
+  - `GameScreen`: Pantalla del juego principal.
+  - `ResultScreen`: Pantallas de resultado (`WinnerScreen` y `LoserScreen`).
+
+## 🎮 Cómo jugar
+1. Selecciona una **dificultad** en el menú principal.
+2. Presiona el botón **Play** para comenzar.
+3. Adivina la palabra seleccionando letras en el teclado virtual.
+4. Utiliza las **pistas** sabiamente para revelar letras si te quedas atascado.
+5. Si completas la palabra antes de que se termine el dibujo del ahorcado, ¡ganas! De lo contrario, pierdes.
+
+## 🛠️ Requisitos
+- **Android Studio**: Para ejecutar y modificar el proyecto.
+- **Kotlin 1.8 o superior**.
