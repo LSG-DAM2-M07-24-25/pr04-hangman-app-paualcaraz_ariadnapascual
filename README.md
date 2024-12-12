@@ -45,7 +45,7 @@ Este es un proyecto de un **juego del ahorcado** desarrollado en **Kotlin** util
 
 ### Pantalla de resultados (ResultScreen)
 ![Result Screen](resultscreen1.png)
-
+![Result Screen 2](resultscreen2.png)
 ## 🛠️ Requisitos
 - **Android Studio**: Para ejecutar y modificar el proyecto.
 - **Kotlin 1.8 o superior**.
